@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>NAOP - Node Asterisk Operator Panel</title>
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-vue.min.css">
+    <link rel="stylesheet" href="/css/vue.status-indicator.css">
+    <link rel="stylesheet" href="/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="/css/naop.css">
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="/js/lodash.min.js"></script>
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+
+    <div id="app">
+      <b-container fluid>
+        <b-row>
+          <b-col cols="2" class="col-peer" v-for="peer in peerList">
+            <b-card class="card-peer">
+              <status-indicator
+                positive pulse
+                v-if="peer.status == EXT_STATE.IDLE">
+              </status-indicator>
+              <status-indicator
+                negative pulse
+                v-else-if="peer.status == EXT_STATE.BUSY">
+              </status-indicator>
+              <status-indicator
+                intermediary pulse
+                v-else-if="peer.status == EXT_STATE.IN_USE || peer.status == EXT_STATE.RINGING">
+              </status-indicator>
+              <status-indicator pulse v-else>
+              </status-indicator>
+
+              <b>{{peer | printPeer}}</b>
+              <div>
+                <div v-if="peer.calling"><span class="mdi mdi-call-made text-success"></span> {{peer | callState}}</div>
+                <div v-else-if="peer.receiving"><span class="mdi mdi-call-received text-success"></span> {{peer | receiveState }}</div>
+              </div>
+            </b-card>
+          </b-col>
+        </b-row>
+      </b-container>
+    </div>
+
+    <script type="text/javascript" src="/js/vue.min.js"></script>
+    <script type="text/javascript" src="/js/vue.status-indicator.min.js"></script>
+    <script type="text/javascript" src="/js/polyfill.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap-vue.min.js"></script>
+    <script type="text/javascript" src="/js/naop.js"></script>
+  </body>
+</html>

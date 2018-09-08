@@ -1,0 +1,18 @@
+body {
+  font-size: 12px;
+  background-color: #F6F6F6;
+}
+
+.col-peer {
+  padding: 5px;
+}
+
+.card-peer {
+  padding: 5px 10px;
+  box-shadow: 0px 0px 5px rgba(0,0,0,.02);
+  border-width: 0px;
+}
+
+.card-peer .card-body {
+  padding: 0px;
+}
