@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="/css/naop.css">
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
     <script type="text/javascript" src="/js/lodash.min.js"></script>
+    <script type="text/javascript" src="/js/moment.min.js"></script>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -26,26 +27,43 @@
       <b-container fluid>
         <b-row>
           <b-col cols="2" class="col-peer" v-for="peer in peerList">
+            <b-popover :target="'popoverCardPeer' + peer.extension"
+                triggers="hover focus"
+                :content="'Hola baka'">
+                <b>Host: </b> {{peer.address}} <br />
+                <b>Status: </b> {{peer.statusLog}}
+            </b-popover>
             <b-card class="card-peer">
               <status-indicator
+                :id="'popoverCardPeer' + peer.extension"
                 positive pulse
                 v-if="peer.status == EXT_STATE.IDLE">
               </status-indicator>
               <status-indicator
+                :id="'popoverCardPeer' + peer.extension"
                 negative pulse
                 v-else-if="peer.status == EXT_STATE.BUSY">
               </status-indicator>
               <status-indicator
+                :id="'popoverCardPeer' + peer.extension"
                 intermediary pulse
                 v-else-if="peer.status == EXT_STATE.IN_USE || peer.status == EXT_STATE.RINGING">
               </status-indicator>
-              <status-indicator pulse v-else>
+              <status-indicator
+                :id="'popoverCardPeer' + peer.extension"
+                pulse v-else>
               </status-indicator>
 
               <b>{{peer | printPeer}}</b>
-              <div>
-                <div v-if="peer.calling"><span class="mdi mdi-call-made text-success"></span> {{peer | callState}}</div>
-                <div v-else-if="peer.receiving"><span class="mdi mdi-call-received text-success"></span> {{peer | receiveState }}</div>
+              <div v-for="call in peer.calls">
+                <span :class="{
+                  mdi: true,
+                  'mdi-call-made': call.callType == 'outgoing',
+                  'mdi-call-received': call.callType == 'incoming',
+                  'text-success': true
+                }">
+                </span>
+                {{call.exten}}
               </div>
             </b-card>
           </b-col>

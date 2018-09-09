@@ -1,8 +1,58 @@
 (function(window) {
   Vue.use(bootstrapVue)
 
+  var callTimer = Vue.component('call-timer', {
+    template: '<span v-if="timer"> &mdash; <i class="mdi mdi-clock-outline"></i> <span>{{timer}}</span></span>',
+    props: ['peer'],
+    data: function() {
+      return {
+        timer: '',
+        timerInterval: null
+      }
+    },
+    methods: {
+      startTimer: function() {
+        if (!this.peer.starttime) {
+          this.timer = ''
+        } else {
+          var diffSecond = moment(this.peer.starttime).diff(moment(), 'seconds')
+          diffSecond = Math.abs(diffSecond)
+
+          this.timer = [
+            padZero(Math.floor(diffSecond / (60*60))),
+            padZero(Math.floor(diffSecond / 60)),
+            padZero(Math.floor(diffSecond % 60))
+          ].join(':')
+        }
+
+      }
+    },
+    mounted: function() {
+      if (!this.timerInterval) {
+        this.timerInterval = setInterval(this.startTimer.bind(this), 1000)
+      }
+    },
+    beforeDestroy: function() {
+      if (!this.timerInterval) {
+        clearInterval(this.timerInterval)
+      }
+    },
+    created: function() {
+      this.startTimer.apply(this)
+    }
+  })
+
+  function padZero(num, size) {
+    num = num + ''
+    while (num.length < (size || 2)) {num = "0" + num}
+    return num
+  }
+
   var app = new Vue({
     el: '#app',
+    components: {
+      callTimer: callTimer
+    },
     filters: {
       printPeer: function(peer) {
         return (peer.name == peer.extension || !peer.name) ?
