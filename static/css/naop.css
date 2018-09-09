@@ -21,3 +21,19 @@ body {
 .card-peer .card-body {
   padding: 0px;
 }
+
+.peerCall:first-child {
+  border-top: 1px dashed #DDD;
+}
+
+.peerCall {
+  border-bottom: 1px dashed #DDD;
+  position: relative;
+}
+
+.callTimer {
+  font-size: 10px;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}
