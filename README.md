@@ -9,11 +9,43 @@ Currently is under development.
 Currently Front-End is using [bootstrap-vue](https://bootstrap-vue.js.org). For browser support you can see
 (browser supports)[https://bootstrap-vue.js.org/docs/#browsers-support].
 
+## Configuration
+For configuration of this app you can see at `server.conf`.
+```config
+[web]
+; Port for web server
+port = 3000
+
+[ami]
+; Asterisk host
+host = 192.168.56.3
+; AMI port
+port = 5038
+; AMI username
+user = naop
+; AMI password
+secret = 123456789
+
+[sip]
+; Trunk context match with regex
+trunkContextPattern = ^from-trunk
+```
+
+Here is currently my `manager.conf` configuration for AMI user
+```
+[naop]
+secret = 123456789
+permit=0.0.0.0/0.0.0.0
+read = system,call,log,verbose,command,agent,user,config,command,dtmf,reporting,cdr,dialplan,originate,message,agi,all
+write = system,call,log,verbose,command,agent,user,config,command,dtmf,reporting,cdr,dialplan,originate,message,agi,all
+writetimeout = 5000
+```
+
 ## Features
 * Extensions list
 * Status of extensions
 * Host of extensions
-* Multiple calls tracking on extension
+* Multiple calls tracking extension
 * Trunks list
 
 ## Features plan
