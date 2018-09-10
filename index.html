@@ -59,9 +59,9 @@
                 <div v-for="call in peer.calls" class="peerCall">
                   <span :class="{
                     mdi: true,
-                    'mdi-call-made': call.callType == 'outgoing',
-                    'mdi-call-received': call.callType == 'incoming',
-                    'text-info': call.channelState != CHAN_STATE.LINE_IS_UP,
+                    'mdi-phone-forward': call.callType == 'outgoing',
+                    'mdi-phone-incoming': call.callType == 'incoming',
+                    'text-warning': call.channelState != CHAN_STATE.LINE_IS_UP,
                     'text-success': call.channelState == CHAN_STATE.LINE_IS_UP
                   }">
                   </span>{{call.exten}}
