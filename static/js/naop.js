@@ -2,8 +2,8 @@
   Vue.use(bootstrapVue)
 
   var callTimer = Vue.component('call-timer', {
-    template: '<span v-if="timer"> &mdash; <i class="mdi mdi-clock-outline"></i> <span>{{timer}}</span></span>',
-    props: ['peer'],
+    template: '<span v-if="timer"><i class="mdi mdi-clock-outline"></i> <span>{{timer}}</span></span>',
+    props: ['call'],
     data: function() {
       return {
         timer: '',
@@ -12,10 +12,10 @@
     },
     methods: {
       startTimer: function() {
-        if (!this.peer.starttime) {
+        if (!this.call.time) {
           this.timer = ''
         } else {
-          var diffSecond = moment(this.peer.starttime).diff(moment(), 'seconds')
+          var diffSecond = moment(this.call.time).diff(moment(), 'seconds')
           diffSecond = Math.abs(diffSecond)
 
           this.timer = [
@@ -24,21 +24,20 @@
             padZero(Math.floor(diffSecond % 60))
           ].join(':')
         }
-
-      }
-    },
-    mounted: function() {
-      if (!this.timerInterval) {
-        this.timerInterval = setInterval(this.startTimer.bind(this), 1000)
       }
     },
     beforeDestroy: function() {
+      // Clean the interval on hidden
       if (!this.timerInterval) {
         clearInterval(this.timerInterval)
       }
     },
     created: function() {
       this.startTimer.apply(this)
+
+      if (!this.timerInterval) {
+        this.timerInterval = setInterval(this.startTimer.bind(this), 1000)
+      }
     }
   })
 
@@ -82,6 +81,16 @@
           RINGING: 8,
           ON_HOLD: 16
         },
+        CHAN_STATE: {
+          IS_DOWN_AVAILABLE: 0,
+          IS_DOWN_RESERVED: 1,
+          IS_OFF_HOOK: 2,
+          DIGITS: 3,
+          RING: 4,
+          RINGING: 5,
+          LINE_IS_UP: 6,
+          BUSY: 7,
+        },
         findPeer: function(ext) {
           return _.find(this.peers, function(peer) {
             return ext == peer.extension
@@ -96,7 +105,10 @@
     },
     computed: {
       peerList: function() {
-        return this.peers
+        return _.sortBy(this.peers, function(o) {
+          var ext = parseInt(o.extension)
+          return !isNaN(ext) ? ext : o.extension
+        })
       }
     },
     methods: {
