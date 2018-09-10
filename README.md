@@ -5,6 +5,10 @@ extensions and trunks.
 
 Currently is under development.
 
+## Browser Supports
+Currently Front-End is using [bootstrap-vue](https://bootstrap-vue.js.org). For browser support you can see
+(browser supports)[https://bootstrap-vue.js.org/docs/#browsers-support].
+
 ## Features
 * Extensions list
 * Status of extensions
