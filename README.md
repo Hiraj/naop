@@ -1,7 +1,7 @@
 # NAOP
 Node Asterisk Operator Panel. Currently is just support for SIP, because I don't know
 how to test other like DAHDI, IAX2, etc. This project was created for monitor the Asterisk
-extensions and trunks.
+extensions and trunks. Tested with Asterisk 11.
 
 Currently is under development.
 
@@ -47,6 +47,7 @@ writetimeout = 5000
 * Host of extensions
 * Multiple calls tracking extension
 * Trunks list
+* Extensions & trunks search
 
 ## Features plan
 * Admin Page
