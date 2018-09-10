@@ -126,14 +126,17 @@
           }
 
           var result = _.filter(sorted, function(o) {
-
+            // Skip trunk
+            if (o.type == 'trunk') {
+              return false
+            }
 
             if (filter.length > 1) {
               var ext = parseInt(o.extension)
               if (isNaN(ext)) {
                 return false
               }
-              console.log(filter)
+
               if (filter[0] == '<' || filter[0] == '>' ||
                   filter[0] == '<=' || filter[0] == '>=') {
                 switch (filter[0]) {
@@ -156,7 +159,70 @@
             }
           })
         } else {
-          var result = sorted
+          var result = _.filter(sorted, function(o) {
+            return o.type != 'trunk'
+          })
+        }
+
+        return result
+      },
+      trunkList: function() {
+        var sorted = _.sortBy(this.peers, function(o) {
+          var ext = parseInt(o.extension)
+          return !isNaN(ext) ? ext : o.extension
+        })
+
+        if (this.filterExtension) {
+          var filter = [this.filterExtension]
+            , rangeFilter = this.filterExtension.match(/^(\d+)\-(\d+)$/)
+            , gtltFilter = this.filterExtension.match(/^(\<|\>|\<=|\>=)(\d+)$/)
+
+          if (rangeFilter && rangeFilter[1] && rangeFilter[2]) {
+            filter = [
+              parseInt(rangeFilter[1] > rangeFilter[2] ? rangeFilter[2] : rangeFilter[1]),
+              parseInt(rangeFilter[2] > rangeFilter[1] ? rangeFilter[2] : rangeFilter[1])
+            ]
+          } else if (gtltFilter && gtltFilter[1] && gtltFilter[2]) {
+            filter = [gtltFilter[1], gtltFilter[2]]
+          }
+
+          var result = _.filter(sorted, function(o) {
+            // Skip extension
+            if (o.type == 'extension') {
+              return false
+            }
+
+            if (filter.length > 1) {
+              var ext = parseInt(o.extension)
+              if (isNaN(ext)) {
+                return false
+              }
+
+              if (filter[0] == '<' || filter[0] == '>' ||
+                  filter[0] == '<=' || filter[0] == '>=') {
+                switch (filter[0]) {
+                  case '<':
+                    return ext < filter[1]
+                  case '<=':
+                    return ext <= filter[1]
+                  case '>':
+                    return ext > filter[1]
+                  case '>=':
+                    return ext >= filter[1]
+                }
+              } else {
+                return o.extension >= filter[0] && o.extension <= filter[1]
+              }
+            } else {
+              var ext = o.extension + ''
+              var pattern = new RegExp(filter[0].replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&'), 'i')
+              return pattern.test(ext)
+            }
+          })
+        } else {
+          var result = _.filter(sorted, function(o) {
+            return o.type != 'extension'
+          })
         }
 
         return result

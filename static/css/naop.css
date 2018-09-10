@@ -21,6 +21,15 @@ body {
   padding: 5px 10px;
   box-shadow: 0px 0px 5px rgba(0,0,0,.2);
   border-width: 0px;
+  background-color: #e7fff5;
+}
+
+.card-peer-unavailable {
+  opacity: .4;
+}
+
+.card-peer-active {
+  background-color: #ffd4d4;
 }
 
 .card-peer .card-body {
@@ -39,6 +48,10 @@ body {
 
 .peerCall:first-child {
   border-top: 1px dashed #DDD;
+}
+
+.card-peer-active .peerCall {
+  border-color: #927474;
 }
 
 .peerCall {
@@ -62,4 +75,16 @@ body {
   height: calc(2rem + 2px);
   box-shadow: 0px 0px 5px rgba(0,0,0,.2);
   border-radius: 0px;
+}
+
+.card-panel > .card-body {
+  background-color: #444;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.card-panel > .card-header {
+  font-size: 14px;
+  font-weight: bold;
+  padding: 5px 10px;
 }

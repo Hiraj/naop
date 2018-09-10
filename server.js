@@ -14,7 +14,7 @@ let conf = util.getConfig()
   , io = socket(server)
   , manager = util.createManager(conf)
 
-let interactor = new ManagerInteractor(manager, io)
+let interactor = new ManagerInteractor(manager, io, conf)
 
 app.use(express.static('static'))
 
