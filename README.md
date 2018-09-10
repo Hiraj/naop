@@ -7,7 +7,7 @@ Currently is under development.
 
 ## Browser Supports
 Currently Front-End is using [bootstrap-vue](https://bootstrap-vue.js.org). For browser support you can see
-(browser supports)[https://bootstrap-vue.js.org/docs/#browsers-support].
+[browser supports](https://bootstrap-vue.js.org/docs/#browsers-support).
 
 ## Configuration
 For configuration of this app you can see at `server.conf`.
