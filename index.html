@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="/css/bootstrap-vue.min.css">
     <link rel="stylesheet" href="/css/vue.status-indicator.css">
     <link rel="stylesheet" href="/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="/css/animate.min.css">
     <link rel="stylesheet" href="/css/naop.css">
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
     <script type="text/javascript" src="/js/lodash.min.js"></script>
@@ -80,6 +81,9 @@
                       <span :class="{
                         callAction: true,
                         mdi: true,
+                        animated: CHAN_STATE.RINGING == call.channelState,
+                        bounce: CHAN_STATE.RINGING == call.channelState,
+                        infinite: CHAN_STATE.RINGING == call.channelState,
                         'mdi-phone-forward': call.callType == 'outgoing',
                         'mdi-phone-incoming': call.callType == 'incoming',
                         'text-warning': call.channelState != CHAN_STATE.LINE_IS_UP,
