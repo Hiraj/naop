@@ -35,8 +35,7 @@
 
           <b-col cols="2" class="col-peer" v-for="peer in peerList">
             <b-popover :target="'popoverCardPeer' + peer.extension"
-                triggers="hover focus"
-                :content="'Hola baka'">
+                triggers="hover focus">
                 <b>Host: </b> {{peer.address}} <br />
                 <b>Status: </b> {{peer.statusLog}}
             </b-popover>
@@ -68,16 +67,31 @@
 
               <b>{{peer | printPeer}}</b>
               <div class="peerCalls">
-                <div v-for="call in peer.calls" class="peerCall">
+                <div v-for="(call, i) in peer.calls" class="peerCall">
                   <span :class="{
+                    callAction: true,
                     mdi: true,
                     'mdi-phone-forward': call.callType == 'outgoing',
                     'mdi-phone-incoming': call.callType == 'incoming',
                     'text-warning': call.channelState != CHAN_STATE.LINE_IS_UP,
                     'text-success': call.channelState == CHAN_STATE.LINE_IS_UP
-                  }">
+                  }"
+                  :id="'popoverCardPeer' + peer.extension+'Call'+i">
                   </span> {{call.exten}}
                   <call-timer class="callTimer" :call="call" v-if="call.time"></call-timer>
+                  <b-popover
+                      :target="'popoverCardPeer' + peer.extension+'Call'+i"
+                      triggers="click">
+                      <b-button size="sm" variant="danger" v-b-tooltip.hover title="Hangup">
+                        <i class="mdi mdi-phone-hangup"></i>
+                      </b-button>
+                      <b-button size="sm" variant="warning" v-b-tooltip.hover title="Hold">
+                          <i class="mdi mdi-phone-paused"></i>
+                        </b-button>
+                      <!-- <b-button size="sm" variant="info" v-b-tooltip.hover title="Transfer Call">
+                        <i class="mdi mdi-phone-outgoing"></i>
+                      </b-button> -->
+                  </b-popover>
                 </div>
               </div>
             </b-card>
