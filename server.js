@@ -13,9 +13,12 @@ let conf = util.getConfig()
   , server = http.Server(app)
   , io = socket(server)
   , manager = util.createManager(conf)
+  , interactor = new ManagerInteractor(manager, io, conf)
+  , db = util.createDBConn()
 
-let interactor = new ManagerInteractor(manager, io, conf)
-
+db.serializeAsync().then(() => {
+  util.createDBTable(db)
+})
 app.use(express.static('static'))
 
 io.on('connection', (socket) => {

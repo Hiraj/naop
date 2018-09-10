@@ -1,4 +1,4 @@
-# naop
+# NAOP
 Node Asterisk Operator Panel. Currently only support for SIP.
 
 ![alt text](https://raw.githubusercontent.com/yusrilhs/naop/master/ss.gif)
