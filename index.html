@@ -25,7 +25,14 @@
 
     <div id="app">
       <b-container fluid>
-        <b-row>
+        <b-row class="justify-content-md-center">
+          <b-col cols="5" class="search-input">
+              <b-input class="text-center mb-2" placeholder="Example Search: 101, 101-110, name" v-model="filterExtension"/>
+          </b-col>
+
+          <!-- Just for cleaning -->
+          <b-col cols="12"></b-col>
+
           <b-col cols="2" class="col-peer" v-for="peer in peerList">
             <b-popover :target="'popoverCardPeer' + peer.extension"
                 triggers="hover focus"
@@ -33,10 +40,10 @@
                 <b>Host: </b> {{peer.address}} <br />
                 <b>Status: </b> {{peer.statusLog}}
             </b-popover>
-            <b-card class="card-peer">
+            <b-card class="card-peer h-100">
               <status-indicator
                 :id="'popoverCardPeer' + peer.extension"
-                positive pulse
+                active pulse
                 v-if="peer.status == EXT_STATE.IDLE">
               </status-indicator>
               <status-indicator
@@ -47,7 +54,12 @@
               <status-indicator
                 :id="'popoverCardPeer' + peer.extension"
                 intermediary pulse
-                v-else-if="peer.status == EXT_STATE.IN_USE || peer.status == EXT_STATE.RINGING">
+                v-else-if="peer.status == EXT_STATE.RINGING">
+              </status-indicator>
+              <status-indicator
+                :id="'popoverCardPeer' + peer.extension"
+                positive pulse
+                v-else-if="peer.status == EXT_STATE.IN_USE || peer.status == EXT_STATE.ON_HOLD">
               </status-indicator>
               <status-indicator
                 :id="'popoverCardPeer' + peer.extension"
@@ -64,7 +76,7 @@
                     'text-warning': call.channelState != CHAN_STATE.LINE_IS_UP,
                     'text-success': call.channelState == CHAN_STATE.LINE_IS_UP
                   }">
-                  </span>{{call.exten}}
+                  </span> {{call.exten}}
                   <call-timer class="callTimer" :call="call" v-if="call.time"></call-timer>
                 </div>
               </div>

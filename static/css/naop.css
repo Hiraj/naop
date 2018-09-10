@@ -14,7 +14,7 @@ body {
 
 .card-peer {
   padding: 5px 10px;
-  box-shadow: 0px 0px 5px rgba(0,0,0,.02);
+  box-shadow: 0px 0px 5px rgba(0,0,0,.2);
   border-width: 0px;
 }
 
@@ -36,4 +36,15 @@ body {
   position: absolute;
   top: 0px;
   right: 0px;
+}
+
+.search-input {
+  margin-top: 10px;
+}
+
+.search-input .form-control {
+  font-size: 12px;
+  height: calc(2rem + 2px);
+  box-shadow: 0px 0px 5px rgba(0,0,0,.2);
+  border-radius: 0px;
 }
