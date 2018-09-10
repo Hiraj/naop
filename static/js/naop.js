@@ -143,7 +143,7 @@
                     return ext <= filter[1]
                   case '>':
                     return ext > filter[1]
-                  case '>':
+                  case '>=':
                     return ext >= filter[1]
                 }
               } else {

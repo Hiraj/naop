@@ -1,3 +1,8 @@
+html,
+body {
+  height: 100%;
+}
+
 body {
   font-size: 12px;
   background-color: #F6F6F6;
@@ -20,6 +25,16 @@ body {
 
 .card-peer .card-body {
   padding: 0px;
+}
+
+.tooltip {
+  font-size: 10px;
+}
+
+.callAction {
+  display: inline-block;
+  width: 11px;
+  cursor: pointer;
 }
 
 .peerCall:first-child {
