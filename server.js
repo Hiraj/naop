@@ -30,10 +30,10 @@ io.on('connection', (socket) => {
     })
   })
 
-  // Send call 1 by 1 for minimal output
-  socket.on('show calls', () => {
-    _.forEach(interactor.calls, (call) => {
-      socket.emit('call', call)
+  // Send conference 1 by 1 for minimal output
+  socket.on('show conferences', () => {
+    _.forEach(interactor.conferences, (conference) => {
+      socket.emit('conference', conference)
     })
   })
 })

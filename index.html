@@ -110,82 +110,77 @@
             </b-card>
           </b-col>
           <b-col cols="3">
-              <b-card
-                header="Trunks"
+            <b-card
+              header="Trunks"
+              class="card-panel">
+            <b-row>
+              <b-col cols="12" class="col-peer" v-for="peer in trunkList">
+                <b-popover :target="'popoverCardPeer' + peer.extension"
+                    triggers="hover focus">
+                    <b>Host: </b> {{peer.address}} <br />
+                    <b>Status: </b> {{peer.statusLog}}
+                </b-popover>
+                <b-card
+                  :class="{
+                    'card-peer': true,
+                    'h-100': true,
+                    'card-peer-active': peer.status == EXT_STATE.IN_USE || peer.status == EXT_STATE.ON_HOLD,
+                    'card-peer-unavailable': [
+                      EXT_STATE.IDLE,
+                      EXT_STATE.RINGING,
+                      EXT_STATE.IN_USE,
+                      EXT_STATE.ON_HOLD,
+                      EXT_STATE.BUSY
+                    ].indexOf(peer.status) == -1
+                  }">
+                  <status-indicator
+                    :id="'popoverCardPeer' + peer.extension"
+                    :active="peer.status == EXT_STATE.IDLE"
+                    :intermediary="peer.status == EXT_STATE.RINGING"
+                    :positive="peer.status == EXT_STATE.IN_USE || peer.status == EXT_STATE.ON_HOLD"
+                    :negative="[
+                      EXT_STATE.IDLE,
+                      EXT_STATE.RINGING,
+                      EXT_STATE.IN_USE,
+                      EXT_STATE.ON_HOLD
+                    ].indexOf(peer.status) == -1"
+                    :pulse="[
+                      EXT_STATE.IDLE,
+                      EXT_STATE.RINGING,
+                      EXT_STATE.IN_USE,
+                      EXT_STATE.ON_HOLD
+                    ].indexOf(peer.status) != -1">
+                  </status-indicator>
+                  <b>{{peer | printPeer}}</b>
+                </b-card>
+              </b-col>
+            </b-row>
+            </b-card>
+            <b-card
+                header="Conferences"
                 class="card-panel">
               <b-row>
-                <b-col cols="12" class="col-peer" v-for="peer in trunkList">
-                  <b-popover :target="'popoverCardPeer' + peer.extension"
-                      triggers="hover focus">
-                      <b>Host: </b> {{peer.address}} <br />
-                      <b>Status: </b> {{peer.statusLog}}
-                  </b-popover>
+                <b-col cols="12" class="col-peer" v-for="peer in conferences">
                   <b-card
                     :class="{
-                      'card-peer': true,
-                      'h-100': true,
-                      'card-peer-active': peer.status == EXT_STATE.IN_USE || peer.status == EXT_STATE.ON_HOLD,
-                      'card-peer-unavailable': [
-                        EXT_STATE.IDLE,
-                        EXT_STATE.RINGING,
-                        EXT_STATE.IN_USE,
-                        EXT_STATE.ON_HOLD,
-                        EXT_STATE.BUSY
-                      ].indexOf(peer.status) == -1
+                      'card-peer': true
                     }">
                     <status-indicator
-                      :id="'popoverCardPeer' + peer.extension"
-                      :active="peer.status == EXT_STATE.IDLE"
-                      :intermediary="peer.status == EXT_STATE.RINGING"
-                      :positive="peer.status == EXT_STATE.IN_USE || peer.status == EXT_STATE.ON_HOLD"
-                      :negative="[
-                        EXT_STATE.IDLE,
-                        EXT_STATE.RINGING,
-                        EXT_STATE.IN_USE,
-                        EXT_STATE.ON_HOLD
-                      ].indexOf(peer.status) == -1"
-                      :pulse="[
-                        EXT_STATE.IDLE,
-                        EXT_STATE.RINGING,
-                        EXT_STATE.IN_USE,
-                        EXT_STATE.ON_HOLD
-                      ].indexOf(peer.status) != -1">
+                      :positive="peer.members.length"
+                      :negative="!peer.members.length"
+                      pulse>
                     </status-indicator>
-
-                    <b>{{peer | printPeer}}</b>
-                    <div class="peerCalls">
-                      <div v-for="(call, i) in peer.calls" class="peerCall">
-                        <span :class="{
-                          callAction: true,
-                          mdi: true,
-                          'mdi-phone-forward': call.callType == 'outgoing',
-                          'mdi-phone-incoming': call.callType == 'incoming',
-                          'text-warning': call.channelState != CHAN_STATE.LINE_IS_UP,
-                          'text-success': call.channelState == CHAN_STATE.LINE_IS_UP
-                        }"
-                        :id="'popoverCardPeer' + peer.extension+'Call'+i">
-                        </span> {{call.exten}}
-                        <call-timer class="callTimer" :call="call" v-if="call.time"></call-timer>
-                        <b-popover
-                            :target="'popoverCardPeer' + peer.extension+'Call'+i"
-                            triggers="click">
-                            <b-button size="sm" variant="danger" v-b-tooltip.hover title="Hangup">
-                              <i class="mdi mdi-phone-hangup"></i>
-                            </b-button>
-                            <b-button size="sm" variant="warning" v-b-tooltip.hover title="Hold">
-                                <i class="mdi mdi-phone-paused"></i>
-                              </b-button>
-                            <!-- <b-button size="sm" variant="info" v-b-tooltip.hover title="Transfer Call">
-                              <i class="mdi mdi-phone-outgoing"></i>
-                            </b-button> -->
-                        </b-popover>
-                      </div>
+                    <b>{{peer.id}} Conferences</b>
+                    <div>
+                      <span class="peer-member" v-for="m in peer.members">
+                        <span class="mdi mdi-account"></span> {{m.exten}}
+                      </span>
                     </div>
                   </b-card>
                 </b-col>
               </b-row>
-              </b-card>
-            </b-col>
+            </b-card>
+          </b-col>
         </b-row>
       </b-container>
     </div>

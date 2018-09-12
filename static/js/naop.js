@@ -1,4 +1,10 @@
 (function(window) {
+  function padZero(num, size) {
+    num = num + ''
+    while (num.length < (size || 2)) {num = "0" + num}
+    return num
+  }
+
   Vue.use(bootstrapVue)
 
   var callTimer = Vue.component('call-timer', {
@@ -41,12 +47,6 @@
     }
   })
 
-  function padZero(num, size) {
-    num = num + ''
-    while (num.length < (size || 2)) {num = "0" + num}
-    return num
-  }
-
   var app = new Vue({
     el: '#app',
     components: {
@@ -57,14 +57,6 @@
         return (peer.name == peer.extension || !peer.name) ?
                 peer.extension :
                 peer.extension + ' - ' + peer.name
-      },
-      callState: function(peer) {
-        var call = app.findCall(peer.calling)
-        return call ? call.target : ''
-      },
-      receiveState: function(peer) {
-        var call = app.findCall(peer.receiving)
-        return call ? call.callerid : ''
       }
     },
     data: function() {
@@ -72,6 +64,7 @@
         socket: null,
         peers: [],
         calls: [],
+        conferences: [],
         filterExtension: '',
         EXT_STATE: {
           NOT_FOUND: -1,
@@ -97,9 +90,9 @@
             return ext == peer.extension
           })
         },
-        findCall: function(uniqueid) {
-          return _.find(this.calls, function(call) {
-            return call.uniqueid == uniqueid
+        findConference: function(id) {
+          return _.find(this.conferences, function(conf) {
+            return conf.id == id
           })
         }
       }
@@ -232,23 +225,15 @@
       bindSocketEvent: function() {
         this.socket.on('peer', this.processPeer.bind(this))
         this.socket.on('peer remove', this.removePeer.bind(this))
-        this.socket.on('call', this.processCall.bind(this))
-        this.socket.on('call remove', this.removeCall.bind(this))
+        this.socket.on('conference', this.processConference.bind(this))
       },
-      removeCall: function(call) {
-        call = this.findCall(call.uniqueid)
-        if (call) {
-          var callIndex = this.calls.indexOf(peer)
-          this.calls.splice(callIndex, 1)
-        }
-      },
-      processCall: function(call) {
-        var existsCall = this.findCall(call.uniqueid)
-        if (!existsCall) {
-          this.calls.push(call)
+      processConference: function(conf) {
+        var conference = this.findConference(conf.id)
+        if (!conference) {
+          this.conferences.push(conf)
         } else {
-          for(var k in call) {
-            existsCall[k] = call[k]
+          for (var k in conference) {
+            conference[k] = conf[k]
           }
         }
       },
@@ -274,6 +259,7 @@
       this.socket = io()
       this.socket.emit('show peers')
       this.socket.emit('show calls')
+      this.socket.emit('show conferences')
 
       this.bindSocketEvent()
     }
