@@ -98,7 +98,22 @@ body {
   display: block;
   border-bottom: 1px #DDD dashed;
 }
+.peer-member:after,
+.peer-member:before {
+  content: "";
+  display: table;
+}
+
+.peer-member:after {
+  clear: both;
+}
 
 .peer-member:first-child {
   border-top: 1px #DDD dashed;
+}
+
+.peer-member > .icon-mute {
+  display: inline-block;
+  width: 15px;
+  cursor: pointer;
 }

@@ -123,33 +123,13 @@
                 <b-card
                   :class="{
                     'card-peer': true,
-                    'h-100': true,
-                    'card-peer-active': peer.status == EXT_STATE.IN_USE || peer.status == EXT_STATE.ON_HOLD,
-                    'card-peer-unavailable': [
-                      EXT_STATE.IDLE,
-                      EXT_STATE.RINGING,
-                      EXT_STATE.IN_USE,
-                      EXT_STATE.ON_HOLD,
-                      EXT_STATE.BUSY
-                    ].indexOf(peer.status) == -1
+                    'h-100': true
                   }">
                   <status-indicator
                     :id="'popoverCardPeer' + peer.extension"
-                    :active="peer.status == EXT_STATE.IDLE"
-                    :intermediary="peer.status == EXT_STATE.RINGING"
-                    :positive="peer.status == EXT_STATE.IN_USE || peer.status == EXT_STATE.ON_HOLD"
-                    :negative="[
-                      EXT_STATE.IDLE,
-                      EXT_STATE.RINGING,
-                      EXT_STATE.IN_USE,
-                      EXT_STATE.ON_HOLD
-                    ].indexOf(peer.status) == -1"
-                    :pulse="[
-                      EXT_STATE.IDLE,
-                      EXT_STATE.RINGING,
-                      EXT_STATE.IN_USE,
-                      EXT_STATE.ON_HOLD
-                    ].indexOf(peer.status) != -1">
+                    :positive="peer.address"
+                    :negative="!peer.address"
+                    pulse>
                   </status-indicator>
                   <b>{{peer | printPeer}}</b>
                 </b-card>
@@ -173,7 +153,12 @@
                     <b>{{peer.id}} Conferences</b>
                     <div>
                       <span class="peer-member" v-for="m in peer.members">
-                        <span class="mdi mdi-account"></span> {{m.exten}}
+                        <span @click="processMute(m, peer.id)" :class="{
+                          'icon-mute': true,
+                          mdi: true,
+                          'mdi-volume-high': !m.mute,
+                          'mdi-volume-off': m.mute
+                        }"></span> {{m.exten}}
                       </span>
                     </div>
                   </b-card>

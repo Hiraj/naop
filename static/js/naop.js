@@ -253,6 +253,13 @@
             existPeer[k] = peer[k]
           }
         }
+      },
+      processMute: function(member, confId) {
+        this.socket.emit('process mute', {
+          conference: confId,
+          usernum: member.usernum,
+          mute: !member.mute
+        })
       }
     },
     created: function() {

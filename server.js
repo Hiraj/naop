@@ -36,6 +36,10 @@ io.on('connection', (socket) => {
       socket.emit('conference', conference)
     })
   })
+
+  socket.on('process mute', (msg) => {
+    interactor.requestMute(msg)
+  })
 })
 
 app.get('/', (req, res) => {
