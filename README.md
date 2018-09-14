@@ -68,9 +68,6 @@ writetimeout = 5000
   * Queue list
   * Queue member status
   * Queue stats
-* Conference Panel
-  * Who is talking
-  * Mute/Unmute User
 * Stats panel
 
 ## Screenshot
