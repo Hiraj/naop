@@ -48,6 +48,8 @@ writetimeout = 5000
 * Multiple calls tracking extension
 * Trunks list
 * Extensions & trunks search
+* Conference list
+* Mute/Unmute conference member
 
 ## Features plan
 * Admin Page
