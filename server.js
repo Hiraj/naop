@@ -5,6 +5,11 @@ const http = require('http')
     , socket  = require('socket.io')
     , log = require('fancy-log')
     , _ = require('lodash')
+    , lodashId = require('lodash-id')
+    , passport = require('passport')
+    , lowdb = require('lowdb')
+    , FileSync = require('lowdb/adapters/FileSync')
+    , Authenticator = require('./lib/Authenticator')
     , util = require('./lib/util')
     , ManagerInteractor = require('./lib/Manager').Interactor
 
@@ -14,11 +19,12 @@ let conf = util.getConfig()
   , io = socket(server)
   , manager = util.createManager(conf)
   , interactor = new ManagerInteractor(manager, io, conf)
-  , db = util.createDBConn()
+  , authenticator = new Authenticator(passport)
+  , adapter = new FileSync('./naop.json')
+  , db = lowdb(adapter)
 
-db.serializeAsync().then(() => {
-  util.createDBTable(db)
-})
+db._.mixin(lodashId)
+
 app.use(express.static('static'))
 
 io.on('connection', (socket) => {
